@@ -62,7 +62,7 @@ xURL:http://123.57.141.249:8080/beautalk/appMember/appRegistraZon.do
 - (void)getTheData{
     
     NSURL *url = [NSURL URLWithString:URL];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:0 timeoutInterval:60.0];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:0 timeoutInterval:60.0];
     request.HTTPMethod = @"POST";
     NSString *str = [NSString stringWithFormat:@"LoginName=%@&Lpassword=%@",self.textView.nameText.text,self.textView.passText.text];
     NSLog(@"%@=-------%@",self.textView.nameText.text,self.textView.passText.text);
