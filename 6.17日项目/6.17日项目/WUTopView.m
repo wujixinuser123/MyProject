@@ -9,8 +9,6 @@
 #import "WUTopView.h"
 
 @interface WUTopView ()
-@property (strong,nonatomic)    UIButton *loginBtn;
-@property (strong,nonatomic)    UIButton *registBtn;
 @property (strong,nonatomic)    UIImageView *imageview;
 @end
 @implementation WUTopView
@@ -21,6 +19,13 @@
         [self addSubview:self.imageview];
         [self addSubview:self.loginBtn];
         [self addSubview:self.registBtn];
+        [self addSubview:self.sxtImage];
+        [self addSubview:self.sxtlabel];
+        [self addSubview:self.tsLable];
+        //将他们先隐藏
+        self.loginBtn.hidden = YES;
+        self.registBtn.hidden = YES;
+
     }
     return self;
 }
@@ -42,6 +47,28 @@
         make.left.equalTo(ws.registBtn.mas_left).offset(95);
         make.right.equalTo(ws.mas_right).offset(-107);
     }];
+    [self.sxtImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        
+        make.top.equalTo(self.imageview.mas_top).offset(20);
+        make.left.equalTo(self.mas_left).offset(70);
+        make.right.equalTo(self.mas_left).offset(145);
+        make.height.equalTo(75);
+        
+    }];
+    [self.sxtlabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.imageview.mas_top).offset(35);
+        make.left.equalTo(self.mas_left).offset(175);
+        make.right.equalTo(self.mas_right).offset(-135);
+        make.height.equalTo(15);
+    }];
+    [self.tsLable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.sxtlabel.mas_bottom).offset(20);
+        make.left.equalTo(self.mas_left).offset(175);
+        make.right.equalTo(self.mas_right).offset(-135);
+        make.height.equalTo(15);
+
+    }];
+
 }
 - (UIImageView *)imageview
 {
@@ -86,5 +113,33 @@
         [self.loginDelegat jumpToRegistView];
     }
 }
-
+#pragma mark
+#pragma mark 按下按钮显示的
+- (UILabel *)tsLable{
+    if (!_tsLable) {
+        _tsLable = [[UILabel alloc] init];
+        _tsLable.text = @"普通会员";
+        _tsLable.textColor = [UIColor whiteColor];
+        _tsLable.font = [UIFont systemFontOfSize:15];
+        
+    }
+    return _tsLable;
+}
+- (UILabel *)sxtlabel{
+    if (!_sxtlabel) {
+        _sxtlabel = [[UILabel alloc] init];
+        _sxtlabel.textColor = [UIColor whiteColor];
+        _sxtlabel.text = @"尚学堂";
+        _sxtlabel.font = [UIFont systemFontOfSize:15];
+        
+    }
+    return _sxtlabel;
+}
+- (UIImageView *)sxtImage{
+    if (!_sxtImage) {
+        _sxtImage = [[UIImageView alloc] init];
+        _sxtImage.image = [UIImage imageNamed:@"AppIcon"];
+    }
+    return _sxtImage;
+}
 @end

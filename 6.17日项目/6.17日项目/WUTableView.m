@@ -4,7 +4,7 @@
 //
 //  Created by ma c on 16/6/17.
 //  Copyright © 2016年 wu. All rights reserved.
-//
+//17721025595 123123
 
 #import "WUTableView.h"
 @interface WUTableView ()<UITableViewDataSource,UITableViewDelegate>
@@ -21,13 +21,12 @@
           self.scrollEnabled = NO;
           self.delegate = self;
           self.dataSource = self;
-        
-          
         }
     return self;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+
     return self.arrayImageData.count;
 }
 
@@ -44,7 +43,9 @@
         cell.detailTextLabel.text = @"400-6010-545";
     }
     cell.textLabel.text = self.arrayNameData[indexPath.row];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    if (indexPath.row != 3) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
     return cell;
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

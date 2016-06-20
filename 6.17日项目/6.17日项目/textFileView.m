@@ -124,7 +124,8 @@
 {
     if (!_layButton) {
         _layButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_layButton setImage:[UIImage imageNamed:@"我的界面退出登录按钮"] forState:UIControlStateNormal];
+//        [_layButton setImage:[UIImage imageNamed:@"我的界面退出登录按钮"] forState:UIControlStateNormal];
+        [_layButton setBackgroundImage:[UIImage imageNamed:@"我的界面退出登录按钮"] forState:UIControlStateNormal];
         _layButton.titleLabel.textColor = [UIColor redColor];
 //        _layButton.backgroundColor = RGB(90, 160, 215);
         

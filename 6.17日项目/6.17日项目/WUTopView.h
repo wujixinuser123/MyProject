@@ -15,5 +15,10 @@
 @end
 
 @interface WUTopView : UIView
+@property (strong,nonatomic)    UIButton *loginBtn;
+@property (strong,nonatomic)    UIButton *registBtn;
+@property (strong,nonatomic)    UIImageView *sxtImage;
+@property (strong,nonatomic)    UILabel *sxtlabel;
+@property (strong,nonatomic)    UILabel *tsLable;
 @property (strong,nonatomic)    id<WUTopViewLoginDelegate>loginDelegat;
 @end
