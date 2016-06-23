@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^LogInBlock)(NSDictionary *);
+typedef void(^LayBlock)(NSDictionary*);
 @interface textFileView : UIView
-//外设接口改变内容
-@property (strong,nonatomic)    UIButton *layButton;
-
-@property (strong,nonatomic)    UIButton *longButton;
-@property (strong,nonatomic)    UITextField *nameText;
-@property (strong,nonatomic )   UITextField *passText;
-
+/**登陆block*/
+@property (copy, nonatomic) LogInBlock loginBlock;
+/**去注册block*/
+@property (copy, nonatomic) LayBlock landingBlock;
 @end

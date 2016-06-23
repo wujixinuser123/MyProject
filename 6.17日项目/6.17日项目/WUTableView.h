@@ -8,9 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^exitBlock)();
 @interface WUTableView : UITableView
 
-@property (strong,nonatomic) NSArray *arrayImageData;
-@property (strong,nonatomic) NSArray *arrayNameData;
-
+@property (copy,nonatomic)  exitBlock etBlock;//退出回调
+@property (strong,nonatomic)    NSArray *dataArray;//数据的传输
 @end

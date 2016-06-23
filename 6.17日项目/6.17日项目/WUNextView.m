@@ -49,23 +49,23 @@
     }];
 
     [self.qqBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.mas_top).offset(50);
-        make.left.equalTo(ws.mas_left).offset(54);
-        make.right.equalTo(ws.mas_right).offset(-230);
-        make.height.equalTo(35);
+        make.top.equalTo(ws.mas_top).offset(25);
+        make.left.equalTo(ws.mas_left).offset(60);
+        make.right.equalTo(ws.mas_left).offset(105);
+        make.height.equalTo(45);
     }];
     [self.weChatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.mas_top).offset(50);
-        make.height.equalTo(35);
-        make.left.equalTo(ws.qqBtn.mas_right).offset(55);
-        make.right.equalTo(ws.mas_right).offset(-140);
+        make.top.equalTo(ws.mas_top).offset(25);
+        make.height.equalTo(45);
+        make.left.equalTo(ws.qqBtn.mas_right).offset(60);
+        make.right.equalTo(ws.qqBtn.mas_right).offset(105);
     }];
 
     [self.webBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.mas_top).offset(50);
-        make.height.equalTo(35);
-        make.right.equalTo(ws.mas_right).offset(-54);
-        make.left.equalTo(ws.weChatBtn.mas_right).offset(50);
+        make.top.equalTo(ws.mas_top).offset(25);
+        make.height.equalTo(45);
+        make.right.equalTo(ws.mas_right).offset(-60);
+        make.left.equalTo(ws.weChatBtn.mas_right).offset(60);
 
     }];
     
@@ -97,8 +97,16 @@
     if (!_qqBtn) {
         _qqBtn = [UIButton buttonWithType:UIButtonTypeSystem];
         [_qqBtn setBackgroundImage:[UIImage imageNamed:@"注册界面微博登录 (4)"] forState:(UIControlStateNormal)];
+        [_qqBtn addTarget:self action:@selector(qqlogin) forControlEvents:(UIControlEventTouchUpInside)];
     }
     return _qqBtn;
+}
+//qq的登录
+- (void)qqlogin{
+    
+    if (_tkBtn) {
+        _tkBtn();
+    }
 }
 - (UIButton *)webBtn
 {

@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^TakeBtnBlock)();
 @interface WUNextView : UIView
 //外设接口改变btn的内容
-
+@property (strong,nonatomic) TakeBtnBlock tkBtn;
 @end

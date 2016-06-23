@@ -7,31 +7,51 @@
 //
 
 #import "WUBaseViewController.h"
+static NSString * const BaseURLString = @"http://123.57.141.249:8080/beautalk/";
+//static NSString * const BaseURLString = @"http://192.57.141.249:8080/beautalk/";
 
-@interface WUBaseViewController ()
-
+//实现单例
+@implementation AFNetworkingClient
++(instancetype)sharedCilient
+{
+    static AFNetworkingClient *sharedCilient = nil;
+    
+    static dispatch_once_t oneToKen;
+    dispatch_once (&oneToKen, ^{
+       
+        sharedCilient = [[AFNetworkingClient alloc] initWithBaseURL:[NSURL URLWithString:BaseURLString]];
+        sharedCilient.responseSerializer = [AFJSONResponseSerializer serializer];
+        sharedCilient.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/plain"];
+        
+    });
+    return sharedCilient;
+}
 @end
 
 @implementation WUBaseViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+- (void)getDataFromSever:(NSString *)URL parameter:(NSDictionary *)parameter isSuccess:(successBlock)success isError:(errorBlock)errorblock{
+    
+    [[AFNetworkingClient sharedCilient] GET:URL parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (success) {
+            success(task,responseObject);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (error) {
+            errorblock(task,error);
+        }
+    }];
+    
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)postDataFromSever:(NSString *)URL parameter:(NSDictionary *)parameter isSuccess:(successBlock)success isError:(errorBlock)errorblock
+{
+    [[AFNetworkingClient sharedCilient] POST:URL parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        success(task,responseObject);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        errorblock(task,error);
+    }];
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 @end

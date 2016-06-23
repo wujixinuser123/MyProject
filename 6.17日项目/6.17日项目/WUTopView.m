@@ -9,137 +9,143 @@
 #import "WUTopView.h"
 
 @interface WUTopView ()
-@property (strong,nonatomic)    UIImageView *imageview;
+
+@property (strong, nonatomic)   UIImageView *backImage;                 /** 背景图片 */
+@property (strong, nonatomic)   UIButton *loginButton;                  /** 登陆按钮 */
+@property (strong, nonatomic)   UIButton *landingButton;                /** 注册按钮 */
+@property (strong, nonatomic)   UIImageView *iconImage;                 /** 头像 */
+@property (strong, nonatomic)   UILabel *userNameLabel;                 /** 用户名字 */
+@property (strong, nonatomic)   UILabel *gradeLabel;                    /** 等级 */
 @end
 @implementation WUTopView
+- (void)showLandingAndLoginBtn:(NSDictionary *)dic{
+    if (dic.count != 0) {
+        _iconImage.hidden = NO;
+        _userNameLabel.hidden = NO;
+        _gradeLabel.hidden = NO;
+        _loginButton.hidden = YES;
+        _landingButton.hidden = YES;
+        _userNameLabel.text = @"尚学堂";
+        _gradeLabel.text = @"普通会员";
+    }else{
+        _iconImage.hidden = YES;
+        _userNameLabel.hidden = YES;
+        _gradeLabel.hidden = YES;
+        _loginButton.hidden = NO;
+        _landingButton.hidden = NO;
+    }
+}
+
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self addSubview:self.imageview];
-        [self addSubview:self.loginBtn];
-        [self addSubview:self.registBtn];
-        [self addSubview:self.sxtImage];
-        [self addSubview:self.sxtlabel];
-        [self addSubview:self.tsLable];
-        //将他们先隐藏
-        self.loginBtn.hidden = YES;
-        self.registBtn.hidden = YES;
-
+        [self addSubview:self.backImage];
+        [self addSubview:self.loginButton];
+        [self addSubview:self.landingButton];
+        [self addSubview:self.iconImage];
+        [self addSubview:self.userNameLabel];
+        [self addSubview:self.gradeLabel];
+        self.backgroundColor = [UIColor redColor];
+        NSDictionary *isLogin = [[NSUserDefaults standardUserDefaults]valueForKey:@"IDLOGIN"];
+        [self showLandingAndLoginBtn:isLogin];
     }
     return self;
 }
+
 - (void)layoutSubviews{
     [super layoutSubviews];
-    __weak typeof(self)ws = self;
-    [self.imageview mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.height.left.right.equalTo(ws);
+    WS(weakSelf);
+    [_backImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(weakSelf);
     }];
-    [self.loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.mas_top).offset(55);
-        make.left.equalTo(ws.mas_left).offset(107);
-        make.right.equalTo(ws.mas_left).offset(137);
-        make.height.equalTo(15);
-    }];
-    [self.registBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.mas_top).offset(55);
-        make.height.equalTo(15);
-        make.left.equalTo(ws.registBtn.mas_left).offset(95);
-        make.right.equalTo(ws.mas_right).offset(-107);
-    }];
-    [self.sxtImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        
-        make.top.equalTo(self.imageview.mas_top).offset(20);
-        make.left.equalTo(self.mas_left).offset(70);
-        make.right.equalTo(self.mas_left).offset(145);
-        make.height.equalTo(75);
-        
-    }];
-    [self.sxtlabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.imageview.mas_top).offset(35);
-        make.left.equalTo(self.mas_left).offset(175);
-        make.right.equalTo(self.mas_right).offset(-135);
-        make.height.equalTo(15);
-    }];
-    [self.tsLable mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.sxtlabel.mas_bottom).offset(20);
-        make.left.equalTo(self.mas_left).offset(175);
-        make.right.equalTo(self.mas_right).offset(-135);
-        make.height.equalTo(15);
-
-    }];
-
-}
-- (UIImageView *)imageview
-{
-    if (!_imageview) {
-        _imageview = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"我的背景"]];
     
-    }
-    return _imageview;
-}
-- (UIButton *)loginBtn
-{
-    if (!_loginBtn) {
-        _loginBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_loginBtn setTitle:@"登录" forState:(UIControlStateNormal)];
-        _loginBtn.tintColor = [UIColor whiteColor];
-//        _loginBtn.titleLabel.font = [UIFont systemFontOfSize:20];
-        //点击跳转
-        [_loginBtn addTarget:self action:@selector(loginTo) forControlEvents:(UIControlEventTouchUpInside)];
-    }
-    return _loginBtn;
-}
-//代理的跳转视图方法
-- (void)loginTo{
+    [_loginButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(weakSelf.mas_centerX).offset(-50);
+        make.size.equalTo(CGSizeMake(90, 20));
+        make.centerY.equalTo(weakSelf.mas_centerY);
+    }];
     
-    if (self.loginDelegat) {
-        [self.loginDelegat jumpToLoginView];
-    }
+    [_landingButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(weakSelf.mas_centerX).offset(50);
+        make.size.equalTo(CGSizeMake(90, 20));
+        make.centerY.equalTo(weakSelf.mas_centerY);
+    }];
+    
+    [_iconImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(weakSelf.mas_centerY);
+        make.size.equalTo(CGSizeMake(75, 75));
+        make.left.equalTo(60);
+    }];
+    
+    [_userNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakSelf.iconImage.mas_right).offset(40);
+        make.top.equalTo(weakSelf.iconImage.mas_top).offset(10);
+        make.right.equalTo(weakSelf.mas_right).offset(-20);
+        make.height.equalTo(15);
+    }];
+    
+    [_gradeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(weakSelf.iconImage.mas_bottom).offset(-10);
+        make.left.equalTo(weakSelf.iconImage.mas_right).offset(40);
+        make.height.equalTo(15);
+        make.right.equalTo(weakSelf.mas_right).offset(-20);
+    }];
+    
 }
-- (UIButton *)registBtn
-{
-    if (!_registBtn) {
-        _registBtn = [UIButton buttonWithType:(UIButtonTypeSystem)];
-        [_registBtn setTitle:@"注册" forState:(UIControlStateNormal)];
-        _registBtn.tintColor = [UIColor whiteColor];
-        [_registBtn addTarget:self action:@selector(registView) forControlEvents:UIControlEventTouchUpInside];
+
+- (UIImageView *)backImage{
+    if (!_backImage) {
+        _backImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"我的背景"]];
     }
-    return _registBtn;
+    return _backImage;
 }
-//代理的跳转视图方法
-- (void)registView{
-    if (self.loginDelegat) {
-        [self.loginDelegat jumpToRegistView];
+
+- (UIButton *)loginButton{
+    if (!_loginButton) {
+        _loginButton = [UIButton buttonWithType:(UIButtonTypeSystem)];
+        [_loginButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
+        [_loginButton setTitle:@"登 录" forState:(UIControlStateNormal)];
     }
+    return _loginButton;
 }
-#pragma mark
-#pragma mark 按下按钮显示的
-- (UILabel *)tsLable{
-    if (!_tsLable) {
-        _tsLable = [[UILabel alloc] init];
-        _tsLable.text = @"普通会员";
-        _tsLable.textColor = [UIColor whiteColor];
-        _tsLable.font = [UIFont systemFontOfSize:15];
-        
+
+- (UIButton *)landingButton{
+    if (!_landingButton) {
+        _landingButton = [UIButton buttonWithType:(UIButtonTypeSystem)];
+        [_landingButton setTitle:@"注 册" forState:(UIControlStateNormal)];
+        [_landingButton setTitleColor:[UIColor whiteColor] forState:(UIControlStateNormal)];
     }
-    return _tsLable;
+    return _landingButton;
 }
-- (UILabel *)sxtlabel{
-    if (!_sxtlabel) {
-        _sxtlabel = [[UILabel alloc] init];
-        _sxtlabel.textColor = [UIColor whiteColor];
-        _sxtlabel.text = @"尚学堂";
-        _sxtlabel.font = [UIFont systemFontOfSize:15];
-        
+
+- (UIImageView *)iconImage{
+    if (!_iconImage) {
+        _iconImage = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"登录界面qq登陆"]];
     }
-    return _sxtlabel;
+    return _iconImage;
 }
-- (UIImageView *)sxtImage{
-    if (!_sxtImage) {
-        _sxtImage = [[UIImageView alloc] init];
-        _sxtImage.image = [UIImage imageNamed:@"AppIcon"];
+-(UILabel *)userNameLabel{
+    if (!_userNameLabel) {
+        _userNameLabel = [[UILabel alloc]init];
+        _userNameLabel.textAlignment = NSTextAlignmentLeft;
+        _userNameLabel.font = [UIFont systemFontOfSize:16.0];
+        _userNameLabel.textColor = [UIColor whiteColor];
     }
-    return _sxtImage;
+    return _userNameLabel;
 }
+
+- (UILabel *)gradeLabel{
+    if (!_gradeLabel) {
+        _gradeLabel = [[UILabel alloc]init];
+        _gradeLabel.textColor = [UIColor whiteColor];
+        _gradeLabel.font = [UIFont systemFontOfSize:16.0];
+        _gradeLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    return _gradeLabel;
+}
+
+
+
 @end

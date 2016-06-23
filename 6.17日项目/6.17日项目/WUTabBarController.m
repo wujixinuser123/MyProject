@@ -47,6 +47,6 @@
     }];
     
     self.viewControllers = mut;
-    self.selectedIndex = 3;
+    self.selectedIndex = 0;
 }
 @end

@@ -9,142 +9,78 @@
 #import "WUMyViewController.h"
 #import "WUTopView.h"
 #import "WUTableView.h"
-#import "WURegistViewController.h"
 #import "WULoginViewController.h"
-//遵守代理在代理方法中实现视图的跳转
-@interface WUMyViewController ()<WUTopViewLoginDelegate>
-@property (strong,nonatomic)    WUTopView *topView;
+#import "WURegistViewController.h"
+@interface WUMyViewController ()
 
-@property (strong,nonatomic)    WUTableView *tableView;
-/**处理视图的数据*/
-@property (strong,nonatomic)    NSMutableArray *dataArray;
-@property (strong,nonatomic)    NSMutableArray *nameDataArray;
-@property (strong,nonatomic)    UIButton *pushOutBtn;
+@property (strong, nonatomic)   WUTableView *myTableView;              /** 我的列表 */
+@property (strong, nonatomic)   WUTopView *myTableHeadView;              /** 表格头 */
+
 
 @end
 
 @implementation WUMyViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self judgeIsLogin];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
-    [self.view addSubview:self.topView];
-    [self.view addSubview:self.tableView];
-    __weak typeof(self)ws = self;
-    [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(ws.view.mas_top).offset(64);
-        make.left.right.mas_equalTo(ws.view);
-        make.height.mas_equalTo(124);
+    self.view.backgroundColor = RGB(245, 245, 245);
+    [self.view addSubview:self.myTableView];
+    WS(weakSelf);
+    [_myTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(weakSelf.view);
     }];
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.topView.mas_bottom).offset(35);
-        make.left.right.equalTo(ws.view);
-        make.height.equalTo(88+88+88);
-    }];
-    [self.view addSubview:self.pushOutBtn];
-    [self.pushOutBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.tableView.mas_bottom).offset(30);
-        make.left.equalTo(ws.view.mas_left).offset(46);
-        make.right.equalTo(ws.view.mas_right).offset(-46);
-        make.height.equalTo(40);
-    }];
-    //数据的传送
-    [self TheDataInPutArray];
-    //按钮按下页面的变化
-}
-#pragma mark
-#pragma mark 跳转到俩个界面WUTopViewLoginDelegate
-- (void)jumpToLoginView{
-    
-    WULoginViewController *logView = [[WULoginViewController alloc] init];
-    [self.navigationController pushViewController:logView animated:NO];
-    
 }
 
-- (void)jumpToRegistView
-{
-    WURegistViewController *regView = [[WURegistViewController alloc] init];
-    [self.navigationController pushViewController:regView animated:NO];
-    
-}
-#pragma mark
-#pragma mark 数据的处理
-- (void)TheDataInPutArray{
-    //添加图文到数组中
-    UIImage *image1 = [UIImage imageNamed:@"我的界面我的收藏图标"];
-    UIImage *image2 = [UIImage imageNamed:@"我的界面意见反馈图标"];
-    UIImage *image3 = [UIImage imageNamed:@"我的界面关于我们图标"];
-    UIImage *image4 = [UIImage imageNamed:@"我的界面客服热线图标"];
-    UIImage *image5 = [UIImage imageNamed:@"我的界面我的优惠券图标"];
-    UIImage *image6 = [UIImage imageNamed:@"我的界面邀请好友图标"];
-
-    NSArray  *array = @[image1,image2,image3,image4,image5,image6];
-
-    NSArray *arr = @[@"我的收藏",@"意见反馈",@"关于我们",@"客服热线",@"我的优惠券",@"邀请好友，立刻赚钱"];
-    [self.dataArray addObjectsFromArray:array];
-    [self.nameDataArray addObjectsFromArray:arr];
-    self.tableView.arrayImageData = self.dataArray;
-    self.tableView.arrayNameData = self.nameDataArray;
-}
-
-#pragma mark
-#pragma mark 懒加载视图
-- (WUTopView *)topView
-{
-    if (!_topView) {
-        _topView = [[WUTopView alloc] init];
-        _topView.loginDelegat = self;
+- (WUTableView *)myTableView{
+    if (!_myTableView) {
+        _myTableView = [[WUTableView alloc]init];
+        //设置表格头
+        _myTableView.tableHeaderView = self.myTableHeadView;
+        //表格的内容
+        _myTableView.dataArray = @[@{@"title":@"我的收藏",@"image":@"我的界面我的收藏图标"},@{@"title":@"意见反馈",@"image":@"我的界面意见反馈图标"},@{@"title":@"关于我们",@"image":@"我的界面关于我们图标"},@{@"title":@"客服热线",@"image":@"我的界面客服热线图标"},@{@"title":@"我的优惠劵",@"image":@"我的界面我的优惠券图标"},@{@"title":@"邀请好友，立刻赚钱",@"image":@"我的界面邀请好友图标"}];
+        //退出按钮调用的方法
+        WS(weakSelf);
+        _myTableView.etBlock = ^{
+            [weakSelf judgeIsLogin];
+        };
     }
-    return _topView;
-}
-- (WUTableView *)tableView
-{
-    if (!_tableView) {
-        _tableView = [[WUTableView alloc] init];
-    
-    }
-    return _tableView;
-}
-- (UIButton *)pushOutBtn{
-    if (!_pushOutBtn) {
-        _pushOutBtn = [UIButton buttonWithType:UIButtonTypeSystem];
-        [_pushOutBtn setBackgroundImage:[UIImage imageNamed:@"我的界面退出登录按钮"] forState:UIControlStateNormal];
-        [_pushOutBtn addTarget:self action:@selector(changeTheView) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _pushOutBtn;
-}
-- (void)changeTheView{
-    self.pushOutBtn.hidden = YES;
-    self.topView.tsLable.hidden = YES;
-    self.topView.sxtImage.hidden = YES;
-    self.topView.sxtlabel.hidden = YES;
-    self.topView.loginBtn.hidden = NO;
-    self.topView.registBtn.hidden = NO;
-    __weak typeof(self)ws = self;
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(ws.topView.mas_bottom).offset(35);
-        make.left.right.equalTo(ws.view);
-        make.height.equalTo(88+88);
-    }];
-
-
-}
-#pragma mark
-#pragma mark 存储数据的数组
-- (NSMutableArray *)dataArray
-{
-    if (!_dataArray){
-        
-        _dataArray = [[NSMutableArray alloc] init];
-    }
-    return _dataArray;
+    return _myTableView;
 }
 
-- (NSMutableArray *)nameDataArray
-{
-    if (!_nameDataArray) {
-        _nameDataArray = [[NSMutableArray alloc] init];
+- (WUTopView *)myTableHeadView{
+    if (!_myTableHeadView) {
+        _myTableHeadView = [[WUTopView alloc]initWithFrame:CGRectMake(0, 0, 300, 125)];
+        UIButton *loginBtn = [_myTableHeadView valueForKey:@"loginButton" ];
+        [loginBtn addTarget:self action:@selector(loginButtonMethod) forControlEvents:(UIControlEventTouchUpInside)];
+        UIButton *landingBtn = [_myTableHeadView valueForKey:@"landingButton" ];
+        [landingBtn addTarget:self action:@selector(landingButtonMethod) forControlEvents:(UIControlEventTouchUpInside)];
     }
-    return _nameDataArray;
+    return _myTableHeadView;
 }
+
+- (void)loginButtonMethod{
+    WULoginViewController *login = [[WULoginViewController alloc]init];
+    login.title = @"登陆";
+    [self.navigationController pushViewController:login animated:YES];
+}
+
+- (void)landingButtonMethod{
+    WURegistViewController *landing = [[WURegistViewController alloc]init];
+    landing.title = @"注册";
+    [self.navigationController pushViewController:landing animated:YES];
+}
+
+- (void)judgeIsLogin{
+    NSDictionary *isLogin = [[NSUserDefaults standardUserDefaults]valueForKey:@"IDLOGIN"];
+    [self.myTableHeadView showLandingAndLoginBtn:isLogin];
+    [self.myTableView reloadData];
+}
+
 @end

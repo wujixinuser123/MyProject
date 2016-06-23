@@ -12,17 +12,11 @@
 //
 //  Created by ma c on 16/6/18.
 //  Copyright © 2016年 wu. All rights reserved.
-/**
- 
- 登陆名:LoginName
- 密码 :Lpassword
-xURL:http://123.57.141.249:8080/beautalk/appMember/appRegistraZon.do
- */
 
 #import "WURegistViewController.h"
 #import "textFileView.h"
 #import "WUNextView.h"
-#define URL @"http://123.57.141.249:8080/beautalk/appMember/appRegistraZon.do"
+#import "WURegistView.h"
 @interface WURegistViewController ()
 @property (strong,nonatomic)    UILabel *textLable;
 @property (strong,nonatomic)    textFileView *textView;
@@ -55,31 +49,13 @@ xURL:http://123.57.141.249:8080/beautalk/appMember/appRegistraZon.do
         make.left.right.equalTo(ws.view);
         make.height.equalTo(100);
     }];
-    [self.textView.longButton addTarget:self action:@selector(getTheData) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 #pragma mark 
-#pragma mark  点击登录按钮网络请求
-- (void)getTheData{
+#pragma mark 注册界面
+-(void)getTheData{
     
-    NSURL *url = [NSURL URLWithString:URL];
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:0 timeoutInterval:60.0];
-    request.HTTPMethod = @"POST";
-    NSString *str = [NSString stringWithFormat:@"LoginName=%@&Lpassword=%@",self.textView.nameText.text,self.textView.passText.text];
-    NSLog(@"%@=-------%@",self.textView.nameText.text,self.textView.passText.text);
-    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:data];
-    //请求开始
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (error) {
-            NSLog(@"请求失败");
-        }else{
-            NSLog(@"注册成功");
-        }
-    }];
-    [task resume];
 }
-
 #pragma mark
 #pragma mark 懒加载
 - (UILabel *)textLable{
@@ -98,8 +74,17 @@ xURL:http://123.57.141.249:8080/beautalk/appMember/appRegistraZon.do
     if (!_textView) {
         _textView = [[textFileView alloc] init];
         _textView.backgroundColor = [UIColor whiteColor];
+        UIButton *btn = [_textView valueForKey:@"loginButton"];
+        [btn setImage:[UIImage imageNamed:@"注册界面下一步按钮"] forState:UIControlStateNormal];
+        [btn addTarget:self action:@selector(pushToRegistView) forControlEvents:UIControlEventTouchUpInside];
     }
     return _textView;
+}
+//跳到下个界面(将手机号,密码传过去)
+- (void)pushToRegistView{
+    WURegistView *vie = [[WURegistView alloc] init];
+    
+    [self.navigationController pushViewController:vie animated:NO];
 }
 - (WUNextView *)nextView{
     if (!_nextView) {

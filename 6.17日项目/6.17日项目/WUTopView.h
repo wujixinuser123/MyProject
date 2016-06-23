@@ -8,17 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol WUTopViewLoginDelegate <NSObject>
-
-- (void)jumpToLoginView;
-- (void)jumpToRegistView;
-@end
-
 @interface WUTopView : UIView
-@property (strong,nonatomic)    UIButton *loginBtn;
-@property (strong,nonatomic)    UIButton *registBtn;
-@property (strong,nonatomic)    UIImageView *sxtImage;
-@property (strong,nonatomic)    UILabel *sxtlabel;
-@property (strong,nonatomic)    UILabel *tsLable;
-@property (strong,nonatomic)    id<WUTopViewLoginDelegate>loginDelegat;
+- (void)showLandingAndLoginBtn:(NSDictionary *)dic;
 @end

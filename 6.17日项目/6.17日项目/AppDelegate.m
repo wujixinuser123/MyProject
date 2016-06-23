@@ -8,6 +8,11 @@
 
 #import "AppDelegate.h"
 #import "WUTabBarController.h"
+#import "UMSocialQQHandler.h"
+#import "UMSocial.h"     
+
+#import "UMSocialWechatHandler.h"
+
 @interface AppDelegate ()
 
 @end
@@ -16,13 +21,37 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    //第三方注册需要
+    
+    
+    [UMSocialData setAppKey:@"5767985867e58e855e000e56"];    [UMSocialQQHandler setQQWithAppId:@"100424468" appKey:@"5767985867e58e855e000e56" url:@"http://www.umeng.com/social"];
+    [UMSocialData setAppKey:@"5767985867e58e855e000e56"];
+    //设置微信AppId、appSecret，分享url
+    [UMSocialWechatHandler setWXAppId:@"wxd930ea5d5a258f4f" appSecret:@"db426a9829e4b49a0dcac7b4162da6b6" url:@"http://www.umeng.com/social"];
+    //设置手机QQ 的AppId，Appkey，和分享URL，需要#import "UMSocialQQHandler.h"
+    [UMSocialQQHandler setQQWithAppId:@"100424468" appKey:@"c7394704798a158208a74ab60104f0ba" url:@"http://www.umeng.com/social"];
+    //打开新浪微博的SSO开关，设置新浪微博回调地址，这里必须要和你在新浪微博后台设置的回调地址一致。需要 #import "UMSocialSinaSSOHandler.h"
+//    [UMSocialSinaSSOHandler openNewSinaSSOWithAppKey:@"3921700954"
+//                                              secret:@"04b48b094faeb16683c32669824ebdad"
+//                                         RedirectURL:@"http://sns.whalecloud.com/sina2/callback"];
+
     //创建窗口
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //创建tabbar的对象
     WUTabBarController *tab = [[WUTabBarController alloc] init];
     
     self.window.rootViewController = tab;
-    [self.window makeKeyAndVisible];    return YES;
+    [self.window makeKeyAndVisible];
+    return YES;
+}
+//第三方登录
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    BOOL result = [UMSocialSnsService handleOpenURL:url];
+    if (result == FALSE) {
+        //调用其他SDK，例如支付宝SDK等
+    }
+    return result;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

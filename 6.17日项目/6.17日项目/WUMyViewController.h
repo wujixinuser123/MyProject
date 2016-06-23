@@ -9,5 +9,4 @@
 #import "WUBaseViewController.h"
 
 @interface WUMyViewController : WUBaseViewController
-
 @end
