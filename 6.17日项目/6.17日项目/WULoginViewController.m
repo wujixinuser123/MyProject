@@ -38,9 +38,7 @@
         make.left.right.equalTo(ws.view);
         make.height.equalTo(100);
     }];
-    //点击按钮事件 直接访问
-    UIButton *btn = [_textView valueForKey:@"loginButton"];
-    [btn addTarget:self action:@selector(getTheData) forControlEvents:UIControlEventTouchUpInside];
+
     
     [self methodOfTheQQ];
 }
@@ -59,21 +57,23 @@
 }
 #pragma mark
 #pragma mark 点击登陆按钮网络请求
-- (void)getTheData{
+- (void)getTheData:(NSDictionary *)dic{
     WS(weakSelf);
-    self.textView.loginBlock = ^(NSDictionary *dic){
-        
-    [weakSelf getDataFromSever:@"appMember/appLogin.do" parameter:dic isSuccess:^(NSURLSessionDataTask *task, id project) {
-        NSDictionary *dataDic = (NSDictionary *)project;
+    [weakSelf getDataFromSever:@"appMember/appLogin.do" parameter:dic
+        isSuccess:^(NSURLSessionDataTask *task, id project) {
+        NSDictionary *dataDic = project;
         NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
-        [user setObject:dataDic forKey:@"IDLOGIN"];
-        //成功后进行页面的返回
-        [weakSelf.navigationController popToRootViewControllerAnimated:NO];
+            if ([dataDic[@"ErrorMessage"] isEqualToString:@"登陆成功"]) {
+                [user setObject:dataDic forKey:@"IDLOGIN"];
+                weakSelf.tabBarItem.badgeValue = dataDic[@"result"];
+
+                //成功后进行页面的返回
+                [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+            }
     } isError:^(NSURLSessionDataTask *task, NSError *error) {
         
-        NSLog(@"%@",error.localizedDescription);
+        NSLog(@"=====%@",error.localizedDescription);
     }];
-    };
 
     
 }
@@ -84,7 +84,11 @@
     if (!_textView) {
         _textView = [[textFileView alloc] init];
         _textView.backgroundColor = [UIColor whiteColor];
-
+        //点击按钮事件 直接访问
+        WS(weakSelf);
+        _textView.loginBlock = ^(NSDictionary *dic){
+            [weakSelf getTheData:dic];
+        };
     }
     return _textView;
 }

@@ -1,7 +1,3 @@
-
-
-
-
 //
 //  WURegistView.m
 //  6.17日项目
@@ -13,11 +9,12 @@
 #import "WURegistView.h"
 #import "WUNSTimer.h"
 #import "textFileView.h"
+#import "WURegistViewController.h"
 @interface WURegistView ()<UITextFieldDelegate>
 
 @property (strong,nonatomic)    UITextField *backField;
 @property (strong,nonatomic)    UIButton *textBtn;
-@property (copy,nonatomic)      NSMutableDictionary *dataDict;
+@property (copy,nonatomic)      NSDictionary *dataDict;
 @property (strong,nonatomic)    UIButton *registBtn;
 @property (strong,nonatomic)    UITextField *codeText;
 @end
@@ -28,8 +25,11 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
 //    [self.view addSubview:self.backlable];
+
     [self.view addSubview:self.backField];
     [self.view addSubview:self.textBtn];
+    [self.view addSubview:self.registBtn];
+    [self.view addSubview:self.codeText];
 }
 - (UITextField *)backField{
     if (!_backField) {
@@ -81,44 +81,56 @@
 }
 //网络请求
 - (void)registPost{
-    //网络请求
+//    网络请求
     NSString *str = @"appMember/appRegistration.do";
-    //请求体 将注册输入的带回appMember/appRegistraZon.do
-    textFileView *tw = [[textFileView alloc] init];
+//    请求体 将注册输入的带回appMember/appRegistration.do
+//    NSLog(@"%@",[self getTheDic]);
     
-    WS(weakSelf);
-    tw.landingBlock = ^(NSDictionary *dic){
-        weakSelf.dataDict = (NSMutableDictionary*)dic;
-        [weakSelf.dataDict addEntriesFromDictionary:@{@"Code":weakSelf.codeText.text,@"Telephone":weakSelf.backField.text}];
-        [weakSelf postDataFromSever:str parameter:weakSelf.dataDict isSuccess:^(NSURLSessionDataTask *task, id project) {
-            NSLog(@"请求成功");
-            
-        } isError:^(NSURLSessionDataTask *task, NSError *error) {
-            NSLog(@"%@",error.localizedDescription);
-            
-        }];
-        
-    };
+//    [self postDataFromSever:str parameter:[self getTheDic] isSuccess:^(NSURLSessionDataTask *task, id project) {
+//        NSDictionary *dic = project;
+//        
+//        if ([dic[@"result"] isEqualToString:@"success"]) {
+//           [self.navigationController popToRootViewControllerAnimated:YES];
+//        }
+//        NSLog(@"%@",project);
+//    } isError:^(NSURLSessionDataTask *task, NSError *error) {
+//        NSLog(@"%@",error);
+//    }];
+    [self getDataFromSever:str parameter:[self getTheDic] isSuccess:^(NSURLSessionDataTask *task, id project) {
+        NSLog(@"%@",[self getTheDic]);
+                //返回上级界面
+           NSDictionary *dic = project;
+        NSLog(@"%@",project);
+        if ([dic[@"result"] isEqualToString:@"success"]) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+
+    } isError:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
 
 }
 - (void)postData{
-    [WUNSTimer GCDTimeMethod:self.textBtn];
+//    [WUNSTimer GCDTimeMethod:self.textBtn];
     //获取验证码
-    NSString *str = @"http://123.57.141.249:8080/beautalk/appMember/createCode.do";
+    NSString *str = @"appMember/createCode.do";
     NSDictionary *dictionary = @{@"MemberId":self.backField.text};
-        
+//    NSLog(@"%@",self.backField.text);
     [self postDataFromSever:str parameter:dictionary isSuccess:^(NSURLSessionDataTask *task, id project) {
         NSLog(@"%@",project);
     } isError:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@",error);
     }];
-}
 
-- (NSMutableDictionary *)dataDict
+}
+- (NSDictionary*)getTheDic{
+    return @{@"LoginName":self.dataDic[@"LoginName"],@"Lpassword":self.dataDic[@"Lpassword"],@"Code":self.codeText.text,@"Telephone":self.backField.text};
+}
+- (NSDictionary *)dataDict
 {
     if (!_dataDict) {
-        _dataDict = [[NSMutableDictionary alloc] init];
-        
+        _dataDict = [[NSDictionary alloc] init];
     }
     return _dataDict;
 }

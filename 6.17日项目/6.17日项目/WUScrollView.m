@@ -8,8 +8,8 @@
 //
 
 #import "WUScrollView.h"
-
-@interface WUScrollView ()<UIScrollViewDelegate,UIScrollViewAccessibilityDelegate>
+#import <SDCycleScrollView.h>
+@interface WUScrollView ()<UIScrollViewDelegate,UIScrollViewAccessibilityDelegate,SDCycleScrollViewDelegate>
 
 
 @end
@@ -24,12 +24,20 @@
         self.showsVerticalScrollIndicator = NO;
         self.pagingEnabled = YES;
         self.bounces = NO;
-
         self.delegate = self;
     }
     return self;
 }
-- (void)methodTheBackImage{
+//获取到的图片
+- (void)setDataArray:(NSArray *)dataArray
+{
+    _dataArray = dataArray;
+    SDCycleScrollView *scrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) delegate:self placeholderImage:[UIImage imageNamed:@"1"]];
+    scrollView.pageControlStyle = SDCycleScrollViewPageContolAlimentCenter;
+    scrollView.currentPageDotColor = [UIColor whiteColor];
     
+    [self addSubview:scrollView];
+    scrollView.imageURLStringsGroup = dataArray;
+
 }
 @end

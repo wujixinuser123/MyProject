@@ -1,5 +1,5 @@
 //
-//  WUTableViewCell.h
+//  WUGroupTableView.h
 //  6.17日项目
 //
 //  Created by ma c on 16/6/24.
@@ -7,8 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "WUGroupModel.h"
-@interface WUTableViewCell : UITableViewCell
-@property (strong,nonatomic)  WUGroupModel *groupleModel;
+
+@interface WUGroupTableView : UITableView
 @property (strong,nonatomic)  NSArray *groupArr;
 @end

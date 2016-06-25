@@ -30,6 +30,12 @@ static NSString * const BaseURLString = @"http://123.57.141.249:8080/beautalk/";
 
 @implementation WUBaseViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    [self setAutomaticallyAdjustsScrollViewInsets:NO];
+}
+
 - (void)getDataFromSever:(NSString *)URL parameter:(NSDictionary *)parameter isSuccess:(successBlock)success isError:(errorBlock)errorblock{
     
     [[AFNetworkingClient sharedCilient] GET:URL parameters:parameter progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {

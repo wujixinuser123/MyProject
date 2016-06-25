@@ -51,11 +51,6 @@
     }];
     
 }
-#pragma mark 
-#pragma mark 注册界面
--(void)getTheData{
-    
-}
 #pragma mark
 #pragma mark 懒加载
 - (UILabel *)textLable{
@@ -75,16 +70,22 @@
         _textView = [[textFileView alloc] init];
         _textView.backgroundColor = [UIColor whiteColor];
         UIButton *btn = [_textView valueForKey:@"loginButton"];
-        [btn setImage:[UIImage imageNamed:@"注册界面下一步按钮"] forState:UIControlStateNormal];
+//        [btn setImage:[UIImage imageNamed:@"注册界面下一步按钮"] forState:UIControlStateNormal];
+        [btn setBackgroundImage:[UIImage imageNamed:@"注册界面下一步按钮"] forState:UIControlStateNormal];
         [btn addTarget:self action:@selector(pushToRegistView) forControlEvents:UIControlEventTouchUpInside];
+        
     }
     return _textView;
 }
 //跳到下个界面(将手机号,密码传过去)
 - (void)pushToRegistView{
-    WURegistView *vie = [[WURegistView alloc] init];
-    
-    [self.navigationController pushViewController:vie animated:NO];
+    WS(weakSelf);
+    _textView.loginBlock = ^(NSDictionary *dic){
+        WURegistView *vie = [[WURegistView alloc] init];
+        vie.dataDic = dic;
+        [weakSelf.navigationController pushViewController:vie animated:NO];
+    };
+
 }
 - (WUNextView *)nextView{
     if (!_nextView) {

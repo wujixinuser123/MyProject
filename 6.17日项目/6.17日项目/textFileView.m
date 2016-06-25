@@ -139,7 +139,7 @@
         [_landingButton setTitle:@"免费注册" forState:(UIControlStateNormal)];
         [_landingButton setTitleColor:RGB(67, 182, 245) forState:(UIControlStateNormal)];
         _landingButton.backgroundColor = [UIColor clearColor];
-        [_landingButton addTarget:self action:@selector(landingButtonMethod) forControlEvents:(UIControlEventTouchUpInside)];
+//        [_landingButton addTarget:self action:@selector(landingButtonMethod) forControlEvents:(UIControlEventTouchUpInside)];
     }
     
     return _landingButton;
@@ -154,7 +154,7 @@
 
 - (void)landingButtonMethod{
     if (_landingBlock) {
-        _landingBlock(@{@"LoginName":_userNameText.text,@"Lpassword":_passwordText.text});
+//    _landingBlock(@{@"LoginName":_userNameText.text,@"Lpassword":_passwordText.text});
     }
 }
 

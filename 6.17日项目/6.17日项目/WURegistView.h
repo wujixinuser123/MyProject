@@ -9,5 +9,5 @@
 #import "WUBaseViewController.h"
 
 @interface WURegistView : WUBaseViewController
-
+@property (strong,nonatomic)    NSDictionary *dataDic;
 @end

@@ -1,5 +1,5 @@
 //
-//  WUScrollView.h
+//  WUTowTableView.h
 //  6.17日项目
 //
 //  Created by ma c on 16/6/23.
@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "RootClass.h"
-@interface WUScrollView : UIScrollView
-@property (strong,nonatomic) NSArray *dataArray;
+
+@interface WUTowTableView : UIView
+
 @end
